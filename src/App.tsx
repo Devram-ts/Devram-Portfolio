@@ -6,8 +6,6 @@ import {
   MapPin,
   Linkedin,
   Github,
-  Briefcase,
-  BarChart3,
   ChevronDown,
   ExternalLink,
   Sparkles,
