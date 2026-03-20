@@ -362,27 +362,38 @@ function HeroProfileFrame() {
 }
 
 function ProjectPreviewCard() {
-  const [isHovering, setIsHovering] = useState(false);
-
   return (
     <Card
-      className={`overflow-hidden rounded-[2rem] ${glass} ${neonBorder}`}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-    >
+  className={`group overflow-hidden rounded-[2rem] ${glass} ${neonBorder} transition-all duration-400 hover:-translate-y-0.5 hover:shadow-[0_0_35px_rgba(34,211,238,0.18)]`}
+>
       <CardContent className="relative p-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.18),transparent_38%)]" />
+        <img
+          src={projectImage}
+          alt="Dashboard background"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.01]"
+        />
 
-        <div className="grid lg:grid-cols-[1.08fr_0.92fr]">
-          <div className="relative z-10 p-8 md:p-10">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(2,6,23,0.96)_0%,rgba(2,6,23,0.9)_26%,rgba(2,6,23,0.82)_48%,rgba(2,6,23,0.5)_70%,rgba(2,6,23,0.18)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_right_center,rgba(34,211,238,0.14),transparent_36%)] opacity-100 transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-cyan-400/5 transition-all duration-500 group-hover:bg-cyan-400/10" />
+
+        <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+          <div className="absolute inset-0 rounded-[2rem] shadow-[inset_0_0_40px_rgba(34,211,238,0.12)]" />
+          <div className="absolute -inset-[1px] rounded-[2rem] border border-cyan-300/20" />
+        </div>
+
+        <div className="relative z-10 grid lg:grid-cols-[1.08fr_0.92fr]">
+          <div className="p-8 md:p-10">
             <div className="mb-5 flex items-center justify-between gap-4">
-              <Badge className="rounded-full border border-cyan-400/30 bg-cyan-400/10 text-cyan-200 hover:bg-cyan-400/10">
+              <Badge className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-base font-semibold text-cyan-200 shadow-[0_0_12px_rgba(34,211,238,0.25)] hover:bg-cyan-400/10">
                 {project.status}
               </Badge>
-              <ExternalLink className="h-4 w-4 text-cyan-300" />
+              <ExternalLink className="h-4 w-4 text-cyan-300 transition-transform duration-500 group-hover:scale-110" />
             </div>
 
-            <h3 className="text-3xl font-bold text-white">{project.title}</h3>
+            <h3 className="text-3xl font-bold text-white transition duration-500 group-hover:text-cyan-100">
+              {project.title}
+            </h3>
             <p className="mt-2 text-sm text-cyan-300">{project.stack}</p>
             <p className="mt-6 max-w-2xl leading-8 text-slate-300">
               {project.summary}
@@ -392,7 +403,7 @@ function ProjectPreviewCard() {
               {project.bullets.map((bullet) => (
                 <li
                   key={bullet}
-                  className="rounded-xl border border-cyan-400/10 bg-slate-900/40 p-4"
+                  className="rounded-xl border border-cyan-400/10 bg-slate-900/35 p-4 backdrop-blur-sm transition-all duration-500 group-hover:border-cyan-300/20 group-hover:bg-slate-900/45"
                 >
                   {bullet}
                 </li>
@@ -400,74 +411,7 @@ function ProjectPreviewCard() {
             </ul>
           </div>
 
-          <div className="relative z-10 p-5 md:p-6">
-            <div className="group relative h-[320px] overflow-hidden rounded-[1.75rem] border border-cyan-400/20 bg-slate-950/70 shadow-[0_0_25px_rgba(34,211,238,0.12)] lg:h-full lg:min-h-[420px]">
-              <motion.div
-                className="absolute inset-0"
-                animate={{
-                  scale: isHovering ? 1.03 : 1,
-                }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-              >
-                <motion.img
-  src={projectImage}
-  alt="Dashboard preview"
-  className="absolute inset-0 h-full w-full object-cover"
-  animate={{
-    scale: [1.0, 1.05, 1.02, 1.06, 1.0],
-    x: ["0%", "-6%", "5%", "-4%", "0%"],
-    y: ["0%", "-5%", "4%", "-3%", "0%"],
-    rotate: [0, 0.15, -0.15, 0.1, 0],
-  }}
-  transition={{
-    duration: 26,
-    repeat: Infinity,
-    ease: "easeInOut",
-  }}
-/>
-
-                <motion.div
-                  className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.12),transparent_65%)]"
-                  animate={{
-                    opacity: [0.45, 0.75, 0.55, 0.8, 0.45],
-                    scale: [1, 1.08, 1.03, 1.1, 1],
-                  }}
-                  transition={{
-                    duration: 10,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                />
-
-                <motion.div
-                  className="absolute inset-y-0 -left-1/3 w-1/2 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)] blur-xl"
-                  animate={{ x: ["0%", "260%"] }}
-                  transition={{
-                    duration: 4.8,
-                    repeat: Infinity,
-                    ease: "linear",
-                    repeatDelay: 1.2,
-                  }}
-                />
-              </motion.div>
-
-              <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(2,6,23,0.78),rgba(2,6,23,0.2)_45%,rgba(2,6,23,0.04))]" />
-              <div className="absolute inset-0 rounded-[1.75rem] border border-cyan-300/10 shadow-[inset_0_0_30px_rgba(34,211,238,0.08)]" />
-
-              <motion.div
-                className="absolute bottom-4 left-4 right-4 rounded-2xl border border-cyan-300/20 bg-slate-950/55 p-4 backdrop-blur-md"
-                animate={{
-                  y: isHovering ? -4 : 0,
-                  boxShadow: isHovering
-                    ? "0 0 28px rgba(34,211,238,0.16)"
-                    : "0 0 0px rgba(34,211,238,0)",
-                }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-              >
-                
-              </motion.div>
-            </div>
-          </div>
+          <div className="min-h-[320px] lg:min-h-[420px]" />
         </div>
       </CardContent>
     </Card>
@@ -547,12 +491,7 @@ export default function BlueNeonPortfolio() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.12),transparent_26%),radial-gradient(circle_at_82%_20%,rgba(59,130,246,0.14),transparent_20%),linear-gradient(to_bottom,rgba(2,6,23,1),rgba(2,6,23,0.97))]" />
         <ParticleField />
 
-        <header className="relative z-20 px-6 py-5 md:px-10 xl:hidden">
-          <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-cyan-300">Saparamadu</p>
-            <h1 className={`text-lg font-bold text-white ${neonText}`}>Devram</h1>
-          </div>
-        </header>
+        
 
         <section className="relative z-10 grid min-h-screen gap-10 px-6 py-10 md:px-10 lg:grid-cols-[1.22fr_0.78fr] lg:items-center lg:gap-12 xl:px-14 xl:py-0">
           <div className="flex flex-col justify-center lg:min-h-screen">
