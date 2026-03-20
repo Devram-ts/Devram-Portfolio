@@ -11,20 +11,19 @@ import {
   ChevronDown,
   ExternalLink,
   Sparkles,
-  Database,
+  Instagram,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import profileImage from "@/assets/profile.jpeg";
+import projectImage from "@/assets/dashboard-preview.jpg";
 
 const neonText = "drop-shadow-[0_0_12px_rgba(56,189,248,0.7)]";
 const neonBorder =
   "border border-cyan-400/30 shadow-[0_0_25px_rgba(34,211,238,0.15)]";
 const glass = "backdrop-blur-xl bg-slate-950/55";
-const profileImage = "/profile.jpeg";
-const projectImage = "/dashboard-preview.jpg";
 
-const skills = {
+const skillGroups = {
   "Business Analysis": [
     "Requirement Gathering",
     "User Stories",
@@ -33,22 +32,16 @@ const skills = {
     "Stakeholder Communication",
     "UAT Support",
   ],
-  "Analytics & Reporting": [
+  Technical: ["SQL", "Java", "JavaScript", "MySQL", "MongoDB", "React"],
+  Tools: [
     "Power BI",
     "Excel",
-    "Dashboard Design",
-    "KPI Reporting",
-    "Data Validation",
-    "Data Analysis",
-  ],
-  Tools: ["Word", "PowerPoint", "Figma", "Draw.io", "Jira", "Postman"],
-  "Technical Exposure": [
-    "SQL",
-    "Java",
-    "JavaScript",
-    "MySQL",
-    "MongoDB",
-    "React",
+    "Word",
+    "PowerPoint",
+    "Figma",
+    "Draw.io",
+    "Jira",
+    "Postman",
   ],
 };
 
@@ -65,23 +58,19 @@ const project = {
   ],
 };
 
-const experienceBullets = [
-  "Participated in client requirement-gathering sessions to understand business needs and document functional requirements.",
-  "Assisted in preparing user stories, BRDs, workflow diagrams, meeting notes, and structured project documentation.",
-  "Supported UAT activities by preparing test scenarios, validating fixes, and coordinating issue follow-ups.",
-  "Collaborated with developers, QA teams, and stakeholders to clarify requirements and improve delivery alignment.",
-];
+const experienceSummary =
+  "During my internship as a Business Analyst Intern, I participated in requirement-gathering discussions to better understand business needs and translate them into clear functional expectations. I contributed to preparing user stories, BRDs, workflow diagrams, meeting notes, and other structured documentation that supported project communication and delivery. I was also involved in UAT-related activities, including preparing test scenarios, validating fixes, and following up on reported issues to support smoother implementation. Throughout the internship, I collaborated with developers, QA teams, and stakeholders, which strengthened my ability to communicate requirements clearly, support cross-functional coordination, and contribute to more aligned project outcomes.";
 
 function ParticleField() {
   const particles = useMemo(
     () =>
-      Array.from({ length: 26 }, (_, i) => ({
+      Array.from({ length: 18 }, (_, i) => ({
         id: i,
         left: `${(i * 37) % 100}%`,
-        top: `${(i * 17) % 100}%`,
-        duration: 6 + (i % 5),
-        delay: (i % 7) * 0.35,
-        size: 2 + (i % 4),
+        top: `${(i * 19) % 100}%`,
+        duration: 7 + (i % 5),
+        delay: (i % 6) * 0.35,
+        size: 2 + (i % 3),
       })),
     []
   );
@@ -94,9 +83,9 @@ function ParticleField() {
           className="absolute rounded-full bg-cyan-300/70"
           style={{ left: p.left, top: p.top, width: p.size, height: p.size }}
           animate={{
-            y: [0, -25, 0],
-            opacity: [0.2, 0.8, 0.2],
-            scale: [1, 1.6, 1],
+            y: [0, -22, 0],
+            opacity: [0.12, 0.65, 0.12],
+            scale: [1, 1.45, 1],
           }}
           transition={{
             duration: p.duration,
@@ -107,6 +96,73 @@ function ParticleField() {
         />
       ))}
     </div>
+  );
+}
+
+function MagicCursor() {
+  const [position, setPosition] = useState({ x: -100, y: -100 });
+  const [isHovering, setIsHovering] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(pointer: fine)");
+    setEnabled(mediaQuery.matches);
+
+    const handleChange = (event: MediaQueryListEvent) => setEnabled(event.matches);
+    const handleMove = (event: MouseEvent) => {
+      setPosition({ x: event.clientX, y: event.clientY });
+      setIsVisible(true);
+    };
+    const handleLeave = () => setIsVisible(false);
+    const handleOver = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      setIsHovering(Boolean(target?.closest("a, button")));
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+    window.addEventListener("mousemove", handleMove);
+    window.addEventListener("mouseout", handleLeave);
+    window.addEventListener("mouseover", handleOver);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleChange);
+      window.removeEventListener("mousemove", handleMove);
+      window.removeEventListener("mouseout", handleLeave);
+      window.removeEventListener("mouseover", handleOver);
+    };
+  }, []);
+
+  if (!enabled) return null;
+
+  return (
+    <>
+      <motion.div
+        className="pointer-events-none fixed left-0 top-0 z-[80] hidden h-24 w-24 rounded-full bg-cyan-400/10 blur-3xl md:block"
+        animate={{
+          x: position.x - 48,
+          y: position.y - 48,
+          scale: isHovering ? 1.4 : 1,
+          opacity: isVisible ? 1 : 0,
+        }}
+        transition={{ type: "spring", stiffness: 120, damping: 18, mass: 0.7 }}
+      />
+      <motion.div
+        className="pointer-events-none fixed left-0 top-0 z-[81] hidden h-9 w-9 rounded-full border border-cyan-300/70 shadow-[0_0_28px_rgba(34,211,238,0.35)] md:block"
+        animate={{
+          x: position.x - 18,
+          y: position.y - 18,
+          scale: isHovering ? 1.45 : 1,
+          opacity: isVisible ? 1 : 0,
+        }}
+        transition={{ type: "spring", stiffness: 260, damping: 24, mass: 0.45 }}
+      />
+      <motion.div
+        className="pointer-events-none fixed left-0 top-0 z-[82] hidden h-2.5 w-2.5 rounded-full bg-cyan-200 shadow-[0_0_18px_rgba(103,232,249,0.95)] md:block"
+        animate={{ x: position.x - 5, y: position.y - 5, opacity: isVisible ? 1 : 0 }}
+        transition={{ type: "spring", stiffness: 520, damping: 28, mass: 0.15 }}
+      />
+    </>
   );
 }
 
@@ -127,9 +183,7 @@ function SectionTitle({
       <h2 className={`text-3xl font-bold text-white md:text-4xl ${neonText}`}>
         {title}
       </h2>
-      {subtitle ? (
-        <p className="mt-3 max-w-2xl text-slate-300">{subtitle}</p>
-      ) : null}
+      {subtitle ? <p className="mt-3 max-w-2xl text-slate-300">{subtitle}</p> : null}
     </div>
   );
 }
@@ -142,21 +196,40 @@ function LoadingScreen() {
       exit={{ opacity: 0, transition: { duration: 0.6 } }}
     >
       <ParticleField />
+
       <div className="relative z-10 text-center">
         <motion.div
           className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-cyan-400/50 bg-cyan-400/10 shadow-[0_0_45px_rgba(34,211,238,0.35)]"
           animate={{ rotate: 360 }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
         >
-          <BarChart3 className="h-10 w-10 text-cyan-300" />
+          <motion.div
+            animate={{
+              scale: [1, 1.12, 1],
+              opacity: [0.7, 1, 0.7],
+              rotate: [0, 8, -8, 0],
+            }}
+            transition={{
+              duration: 2.2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            style={{
+              filter: "drop-shadow(0 0 14px rgba(103,232,249,0.95))",
+            }}
+          >
+            <Sparkles className="h-11 w-11 text-cyan-200" />
+          </motion.div>
         </motion.div>
+
         <motion.h1
           className={`text-3xl font-bold tracking-[0.25em] text-cyan-200 md:text-4xl ${neonText}`}
           animate={{ opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
         >
-          LOADING PORTFOLIO
+          LOADING...
         </motion.h1>
+
         <div className="mx-auto mt-6 h-1.5 w-64 overflow-hidden rounded-full bg-slate-800">
           <motion.div
             className="h-full rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(103,232,249,0.85)]"
@@ -185,61 +258,124 @@ function ContactItem({
         <Icon className="h-4 w-4" />
       </div>
       <div>
-        <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-          {label}
-        </p>
+        <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{label}</p>
         <p className="text-sm text-slate-200">{value}</p>
       </div>
     </div>
   );
 }
 
-function HeroPhotoCard() {
+function LeftSidebar({
+  activeSection,
+}: {
+  activeSection: "home" | "works" | "contact";
+}) {
+  const navItems = [
+    { label: "HOME", href: "#top", key: "home" as const },
+    { label: "WORKS", href: "#projects", key: "works" as const },
+    { label: "CONTACT", href: "#contact", key: "contact" as const },
+  ];
+
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 40, scale: 0.92 }}
-      animate={{ opacity: 1, x: 0, scale: 1 }}
-      transition={{ duration: 0.9, delay: 0.25, ease: "easeOut" }}
-      className="relative mx-auto max-w-md"
-    >
-      <div className="absolute -inset-6 rounded-[2.5rem] bg-[radial-gradient(circle,rgba(34,211,238,0.22),transparent_65%)] blur-2xl" />
-      <div className="relative overflow-hidden rounded-[2rem] border border-cyan-300/35 bg-slate-950/70 p-3 shadow-[0_0_35px_rgba(34,211,238,0.22)]">
-        <div className="rounded-[1.65rem] border border-cyan-400/25 bg-slate-900/80 p-3">
-          <motion.div
-            initial={{ opacity: 0, scale: 1.08 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.1, delay: 0.45, ease: "easeOut" }}
-            className="relative overflow-hidden rounded-[1.35rem]"
+    <aside className="fixed left-0 top-0 z-30 hidden h-screen w-[220px] border-r border-cyan-400/10 bg-slate-950/35 px-10 py-8 backdrop-blur-xl xl:flex xl:flex-col xl:justify-between">
+      <div>
+        <div className="mb-12 flex items-center gap-3">
+          <div className="h-10 w-10 rounded-full border border-cyan-300/40 bg-cyan-300/10 shadow-[0_0_22px_rgba(34,211,238,0.22)]" />
+        </div>
+
+        <nav className="space-y-6">
+          {navItems.map((item) => {
+            const isActive = activeSection === item.key;
+            return (
+              <a
+                key={item.label}
+                href={item.href}
+                className={`relative block w-fit text-[1.05rem] tracking-[0.22em] transition ${
+                  isActive ? "text-white" : "text-slate-500 hover:text-cyan-300"
+                }`}
+              >
+                {item.label}
+                <motion.span
+                  className="absolute -bottom-2 left-0 h-px w-[118px] bg-white/85"
+                  initial={false}
+                  animate={{ scaleX: isActive ? 1 : 0, opacity: isActive ? 1 : 0 }}
+                  transition={{ duration: 0.45, ease: "easeOut" }}
+                  style={{ originX: 0 }}
+                />
+              </a>
+            );
+          })}
+        </nav>
+
+        <div className="mt-14 space-y-5 text-slate-200">
+          <a href="https://linkedin.com" className="block transition hover:text-cyan-300">
+            <Linkedin className="h-6 w-6" />
+          </a>
+          <a href="https://instagram.com" className="block transition hover:text-cyan-300">
+            <Instagram className="h-6 w-6" />
+          </a>
+          <a href="https://github.com" className="block transition hover:text-cyan-300">
+            <Github className="h-6 w-6" />
+          </a>
+          <a
+            href="mailto:devramsaparamadu@gmail.com"
+            className="block transition hover:text-cyan-300"
           >
-            <img
-              src={profileImage}
-              alt="Profile"
-              className="h-[430px] w-full object-cover"
-            />
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(2,6,23,0.55),transparent_45%)]" />
-            <div className="absolute bottom-0 left-0 right-0 p-5">
-              <div className="rounded-2xl border border-cyan-300/20 bg-slate-950/55 p-4 backdrop-blur-md">
-                <p className="text-sm uppercase tracking-[0.28em] text-cyan-300">
-                  Professional Profile
-                </p>
-                <p className="mt-2 text-sm leading-7 text-slate-200">
-                  Business analysis, reporting, and dashboard-focused portfolio.
-                </p>
-              </div>
-            </div>
-          </motion.div>
+            <Mail className="h-6 w-6" />
+          </a>
         </div>
       </div>
+
+      <p className="text-sm text-slate-400">© Devram Saparamadu</p>
+    </aside>
+  );
+}
+
+function HeroProfileFrame() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.9, delay: 0.25, ease: "easeOut" }}
+      className="relative mx-auto mb-8 h-[220px] w-[220px] md:h-[280px] md:w-[280px]"
+    >
+      <motion.div
+        className="absolute inset-[-10px] rounded-full bg-[conic-gradient(from_180deg,rgba(34,211,238,0.06),rgba(56,189,248,0.32),rgba(34,211,238,0.06))] blur-sm"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+      />
+      <div className="absolute inset-[-18px] rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.18),transparent_65%)] blur-2xl" />
+      <div className="relative flex h-full w-full items-center justify-center rounded-full border border-cyan-300/30 bg-slate-950/75 p-3 shadow-[0_0_45px_rgba(34,211,238,0.2)]">
+        <div className="h-full w-full overflow-hidden rounded-full border border-cyan-400/30 bg-slate-900/70 shadow-[inset_0_0_24px_rgba(34,211,238,0.12)]">
+          <img
+            src={profileImage}
+            alt="Profile"
+            className="h-full w-full object-cover object-[center_14%] scale-[1.03]"
+          />
+        </div>
+      </div>
+      <motion.div
+        className="absolute inset-0 rounded-full border border-cyan-200/20"
+        animate={{ opacity: [0.35, 0.75, 0.35], scale: [1, 1.035, 1] }}
+        transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
+      />
     </motion.div>
   );
 }
 
 function ProjectPreviewCard() {
+  const [isHovering, setIsHovering] = useState(false);
+
   return (
-    <Card className={`overflow-hidden rounded-[2rem] ${glass} ${neonBorder}`}>
+    <Card
+      className={`overflow-hidden rounded-[2rem] ${glass} ${neonBorder}`}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
       <CardContent className="relative p-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.18),transparent_38%)]" />
-        <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
+
+        <div className="grid lg:grid-cols-[1.08fr_0.92fr]">
           <div className="relative z-10 p-8 md:p-10">
             <div className="mb-5 flex items-center justify-between gap-4">
               <Badge className="rounded-full border border-cyan-400/30 bg-cyan-400/10 text-cyan-200 hover:bg-cyan-400/10">
@@ -247,11 +383,13 @@ function ProjectPreviewCard() {
               </Badge>
               <ExternalLink className="h-4 w-4 text-cyan-300" />
             </div>
+
             <h3 className="text-3xl font-bold text-white">{project.title}</h3>
             <p className="mt-2 text-sm text-cyan-300">{project.stack}</p>
             <p className="mt-6 max-w-2xl leading-8 text-slate-300">
               {project.summary}
             </p>
+
             <ul className="mt-7 space-y-3 text-sm leading-7 text-slate-200">
               {project.bullets.map((bullet) => (
                 <li
@@ -264,25 +402,72 @@ function ProjectPreviewCard() {
             </ul>
           </div>
 
-          <div className="relative min-h-[320px] overflow-hidden lg:min-h-full">
-            <motion.img
-              initial={{ opacity: 0, scale: 1.08 }}
-              whileInView={{ opacity: 0.72, scale: 1 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 1.1, ease: "easeOut" }}
-              src={projectImage}
-              alt="Dashboard preview"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(to_left,rgba(2,6,23,0.22),rgba(2,6,23,0.88)_72%)] lg:bg-[linear-gradient(to_left,rgba(2,6,23,0.22),rgba(2,6,23,0.85)_68%)]" />
-            <div className="absolute inset-0 bg-cyan-400/5" />
-            <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-cyan-300/20 bg-slate-950/55 p-4 backdrop-blur-md">
-              <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">
-                Preview
-              </p>
-              <p className="mt-2 text-sm leading-7 text-slate-200">
-                Add a screenshot export from Power BI here for a polished visual teaser.
-              </p>
+          <div className="relative z-10 p-5 md:p-6">
+            <div className="group relative h-[320px] overflow-hidden rounded-[1.75rem] border border-cyan-400/20 bg-slate-950/70 shadow-[0_0_25px_rgba(34,211,238,0.12)] lg:h-full lg:min-h-[420px]">
+              <motion.div
+                className="absolute inset-0"
+                animate={{
+                  scale: isHovering ? 1.03 : 1,
+                }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              >
+                <motion.img
+  src={projectImage}
+  alt="Dashboard preview"
+  className="absolute inset-0 h-full w-full object-cover"
+  animate={{
+    scale: [1.0, 1.05, 1.02, 1.06, 1.0],
+    x: ["0%", "-6%", "5%", "-4%", "0%"],
+    y: ["0%", "-5%", "4%", "-3%", "0%"],
+    rotate: [0, 0.15, -0.15, 0.1, 0],
+  }}
+  transition={{
+    duration: 26,
+    repeat: Infinity,
+    ease: "easeInOut",
+  }}
+/>
+
+                <motion.div
+                  className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.12),transparent_65%)]"
+                  animate={{
+                    opacity: [0.45, 0.75, 0.55, 0.8, 0.45],
+                    scale: [1, 1.08, 1.03, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+
+                <motion.div
+                  className="absolute inset-y-0 -left-1/3 w-1/2 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)] blur-xl"
+                  animate={{ x: ["0%", "260%"] }}
+                  transition={{
+                    duration: 4.8,
+                    repeat: Infinity,
+                    ease: "linear",
+                    repeatDelay: 1.2,
+                  }}
+                />
+              </motion.div>
+
+              <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(2,6,23,0.78),rgba(2,6,23,0.2)_45%,rgba(2,6,23,0.04))]" />
+              <div className="absolute inset-0 rounded-[1.75rem] border border-cyan-300/10 shadow-[inset_0_0_30px_rgba(34,211,238,0.08)]" />
+
+              <motion.div
+                className="absolute bottom-4 left-4 right-4 rounded-2xl border border-cyan-300/20 bg-slate-950/55 p-4 backdrop-blur-md"
+                animate={{
+                  y: isHovering ? -4 : 0,
+                  boxShadow: isHovering
+                    ? "0 0 28px rgba(34,211,238,0.16)"
+                    : "0 0 0px rgba(34,211,238,0)",
+                }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+              >
+                
+              </motion.div>
             </div>
           </div>
         </div>
@@ -291,228 +476,172 @@ function ProjectPreviewCard() {
   );
 }
 
+function SkillsShowcase() {
+  return (
+    <section id="skills" className="py-20">
+      <SectionTitle
+        eyebrow="Skills"
+        title="Core Capabilities"
+        
+      />
+
+      <div className="grid gap-12 xl:grid-cols-3">
+        {Object.entries(skillGroups).map(([group, items]) => (
+          <div key={group}>
+            <h3 className="mb-8 text-xl font-semibold text-white md:text-2xl">
+              {group}
+            </h3>
+            <div className="flex flex-wrap gap-4">
+              {items.map((item) => (
+                <Badge
+                  key={item}
+                  className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-5 py-3 text-base text-cyan-100 hover:bg-cyan-400/10"
+                >
+                  {item}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export default function BlueNeonPortfolio() {
   const [loading, setLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState<"home" | "works" | "contact">(
+    "home"
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2400);
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const projectsTop = (document.getElementById("projects")?.offsetTop ?? 0) - 160;
+      const contactTop = (document.getElementById("contact")?.offsetTop ?? 0) - 220;
+      const scrollPosition = window.scrollY + window.innerHeight * 0.32;
+
+      if (scrollPosition >= contactTop) {
+        setActiveSection("contact");
+      } else if (scrollPosition >= projectsTop) {
+        setActiveSection("works");
+      } else {
+        setActiveSection("home");
+      }
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div id="top" className="min-h-screen bg-slate-950 text-slate-100">
       <AnimatePresence>{loading ? <LoadingScreen /> : null}</AnimatePresence>
+      <MagicCursor />
+      <LeftSidebar activeSection={activeSection} />
 
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.18),transparent_28%),radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.18),transparent_22%),linear-gradient(to_bottom,rgba(2,6,23,1),rgba(2,6,23,0.96))]" />
+      <div className="relative min-h-screen overflow-hidden xl:pl-[220px]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.12),transparent_26%),radial-gradient(circle_at_82%_20%,rgba(59,130,246,0.14),transparent_20%),linear-gradient(to_bottom,rgba(2,6,23,1),rgba(2,6,23,0.97))]" />
         <ParticleField />
 
-        <header className="relative z-10 border-b border-cyan-400/10 bg-slate-950/55 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-            <div>
-              <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">
-                Portfolio
-              </p>
-              <h1 className={`text-xl font-bold text-white ${neonText}`}>
-                Devram
-              </h1>
-            </div>
-            <nav className="hidden gap-6 text-sm text-slate-300 md:flex">
-              <a href="#about" className="transition hover:text-cyan-300">
-                About
-              </a>
-              <a href="#experience" className="transition hover:text-cyan-300">
-                Experience
-              </a>
-              <a href="#projects" className="transition hover:text-cyan-300">
-                Projects
-              </a>
-              <a href="#skills" className="transition hover:text-cyan-300">
-                Skills
-              </a>
-              <a href="#contact" className="transition hover:text-cyan-300">
-                Contact
-              </a>
-            </nav>
+        <header className="relative z-20 px-6 py-5 md:px-10 xl:hidden">
+          <div>
+            <p className="text-xs uppercase tracking-[0.35em] text-cyan-300">Saparamadu</p>
+            <h1 className={`text-lg font-bold text-white ${neonText}`}>Devram</h1>
           </div>
         </header>
 
-        <section className="relative z-10 mx-auto grid min-h-[90vh] max-w-6xl items-center gap-12 px-6 py-20 md:grid-cols-[1.15fr_0.85fr]">
-          <div>
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-200"
-            >
-              <Sparkles className="h-4 w-4" />
-              Business Analyst Intern • Aspiring SAP Analytics Professional
-            </motion.p>
+        <section className="relative z-10 grid min-h-screen gap-10 px-6 py-10 md:px-10 lg:grid-cols-[1.22fr_0.78fr] lg:items-center lg:gap-12 xl:px-14 xl:py-0">
+          <div className="flex flex-col justify-center lg:min-h-screen">
 
             <motion.h2
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className={`max-w-4xl text-5xl font-extrabold leading-tight text-white md:text-7xl ${neonText}`}
+              className={`max-w-[820px] font-extralight uppercase leading-[0.9] tracking-[0.08em] text-white text-[2.7rem] md:text-[4.2rem] xl:text-[5.2rem] ${neonText}`}
             >
-              Blue Neon <span className="text-cyan-300">Analytics</span>{" "}
-              Portfolio
+              Devram
+              <br />
+              Saparamadu
             </motion.h2>
 
             <motion.p
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="mt-6 max-w-2xl text-lg leading-8 text-slate-300"
+              className="mt-6 inline-flex w-fit items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-200 shadow-[0_0_20px_rgba(34,211,238,0.16)]"
             >
-              I translate business needs into structured requirements,
-              reporting ideas, and clear analytical outputs. This portfolio
-              highlights business analysis, dashboards, data storytelling, and
-              my growing focus on SAP Analytics.
+              <Sparkles className="h-4 w-4" />
+              Business Analyst | IT Undergraduate 
             </motion.p>
 
-            <motion.div
+            <motion.p
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="mt-8 flex flex-wrap gap-4"
+              transition={{ delay: 0.35 }}
+              className="mt-16 max-w-[25rem] text-[1.2rem] leading-[1.85] tracking-[0.02em] text-slate-300 md:text-[1.65rem]"
             >
-              <Button className="rounded-2xl border border-cyan-300/40 bg-cyan-300/15 px-6 text-cyan-100 shadow-[0_0_20px_rgba(34,211,238,0.25)] hover:bg-cyan-300/20">
-                View Projects
-              </Button>
-              <Button
-                variant="outline"
-                className="rounded-2xl border-cyan-400/30 bg-slate-950/20 text-cyan-200 hover:bg-slate-900/80"
-              >
-                Download Resume
-              </Button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-12 grid gap-4 sm:grid-cols-3"
-            >
-              <ContactItem icon={Mail} label="Email" value="yourname@email.com" />
-              <ContactItem
-                icon={Linkedin}
-                label="LinkedIn"
-                value="linkedin.com/in/yourname"
-              />
-              <ContactItem
-                icon={Github}
-                label="Portfolio / GitHub"
-                value="github.com/yourname"
-              />
-            </motion.div>
+              Driven by clarity, creativity, and meaningful user-focused work,
+              <br />
+              with eagerness to contribute, learn, and grow in the dynamic world of IT.
+              
+            </motion.p>
           </div>
 
-          <HeroPhotoCard />
+          <div className="flex flex-col justify-center lg:min-h-screen lg:pt-12 xl:pr-10">
+            <HeroProfileFrame />
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.35, duration: 0.8 }}
+              className="mx-auto w-full max-w-[22rem]"
+            >
+              <div className="mb-4">
+                <h3 className="text-[1.8rem] font-light uppercase tracking-[0.05em] text-white md:text-[2.6rem]">
+                  About Me
+                </h3>
+                <div className="mt-3 h-px w-full bg-white/25" />
+              </div>
+
+              <div className="max-w-[20rem] space-y-3 text-base leading-[1.9] text-slate-300 md:text-[1.1rem] md:leading-[2]">
+                <p>
+                  I am currently in my final year of BSc (Hons) in Information Technology at SLIIT University with hands-on exposure to business analysis activities such as requirement gathering, process documentation, workflow analysis, and testing support.
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </section>
       </div>
 
-      <main className="mx-auto max-w-6xl px-6 py-8">
-        <section id="about" className="py-16">
-          <SectionTitle
-            eyebrow="About"
-            title="Profile"
-            subtitle="A polished portfolio layout for internship applications, analytics showcases, and recruiter-friendly storytelling."
-          />
-
-          <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
-            <Card className={`${glass} ${neonBorder} rounded-[2rem]`}>
-              <CardContent className="p-8">
-                <p className="text-lg leading-8 text-slate-300">
-                  I am an IT undergraduate with hands-on exposure to business
-                  analysis activities such as requirement gathering, process
-                  documentation, workflow analysis, and testing support. I enjoy
-                  converting raw information into clear structures, visual
-                  insights, and practical deliverables that support project
-                  teams and business decision-making.
-                </p>
-                <p className="mt-5 text-lg leading-8 text-slate-300">
-                  My current direction is centered on analytics, dashboarding,
-                  and enterprise reporting, with a growing interest in SAP
-                  Analytics and data-driven solutions that create measurable
-                  business value.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className={`${glass} ${neonBorder} rounded-[2rem]`}>
-              <CardContent className="grid gap-4 p-8">
-                <div className="flex items-start gap-4">
-                  <div className="rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-3 text-cyan-300">
-                    <Briefcase className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-white">Business-Focused</p>
-                    <p className="text-sm leading-7 text-slate-300">
-                      Requirements, documentation, stakeholder coordination, and
-                      process clarity.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-3 text-cyan-300">
-                    <BarChart3 className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-white">Analytics-Oriented</p>
-                    <p className="text-sm leading-7 text-slate-300">
-                      Dashboards, KPI reporting, insights, and portfolio-ready
-                      case studies.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-3 text-cyan-300">
-                    <Database className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-white">Future Direction</p>
-                    <p className="text-sm leading-7 text-slate-300">
-                      SAP Analytics, data modelling, reporting workflows, and
-                      enterprise solutions.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
+      <main className="mx-auto max-w-6xl px-6 py-8 xl:ml-[220px] xl:px-14">
         <section id="experience" className="py-16">
           <SectionTitle
             eyebrow="Experience"
             title="Internship & Practical Exposure"
-            subtitle="Replace the placeholders below with your actual company name, dates, and responsibilities."
           />
 
           <Card className={`${glass} ${neonBorder} rounded-[2rem]`}>
             <CardContent className="p-8">
               <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
                 <div>
-                  <h3 className="text-2xl font-bold text-white">
-                    Business Analyst Intern
-                  </h3>
-                  <p className="mt-2 text-cyan-300">[Current Company Name]</p>
+                  <h3 className="text-2xl font-bold text-white">Business Analyst Intern</h3>
+                  <p className="mt-2 text-cyan-300">Soft Gallery (Pvt) Ltd</p>
                 </div>
-                <Badge className="w-fit rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-cyan-200 hover:bg-cyan-400/10">
-                  [Month Year - Present]
+                <Badge className="w-fit text-xl rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-4 text-cyan-200 hover:bg-cyan-400/10">
+                  September 2025 - Present
                 </Badge>
               </div>
-              <div className="mt-8 grid gap-4">
-                {experienceBullets.map((item) => (
-                  <div
-                    key={item}
-                    className="rounded-2xl border border-cyan-400/15 bg-slate-900/45 p-4 text-slate-200"
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
+              <div className="mt-8 rounded-2xl border border-cyan-400/15 bg-slate-900/45 p-6 md:p-7">
+  <p className="leading-8 text-slate-200 md:text-[1.02rem]">
+    {experienceSummary}
+  </p>
+</div>
             </CardContent>
           </Card>
         </section>
@@ -521,84 +650,13 @@ export default function BlueNeonPortfolio() {
           <SectionTitle
             eyebrow="Projects"
             title="Portfolio Highlight"
-            subtitle="A clean preview card with a short summary, bullet points, and a fading visual teaser."
+            
           />
 
           <ProjectPreviewCard />
         </section>
 
-        <section id="skills" className="py-16">
-          <SectionTitle
-            eyebrow="Skills"
-            title="Core Capabilities"
-            subtitle="A recruiter-friendly split between business analysis, reporting, and technical exposure."
-          />
-
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {Object.entries(skills).map(([group, items], idx) => (
-              <motion.div
-                key={group}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.06 }}
-              >
-                <Card className={`h-full rounded-[2rem] ${glass} ${neonBorder}`}>
-                  <CardContent className="p-6">
-                    <h3 className="mb-5 text-xl font-semibold text-white">
-                      {group}
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {items.map((item) => (
-                        <Badge
-                          key={item}
-                          className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-cyan-100 hover:bg-cyan-400/10"
-                        >
-                          {item}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        <section className="py-16">
-          <SectionTitle
-            eyebrow="Education"
-            title="Education"
-            subtitle="Academic background relevant to IT, analytics, and business systems."
-          />
-
-          <Card className={`${glass} ${neonBorder} rounded-[2rem]`}>
-            <CardContent className="p-8">
-              <div className="space-y-5">
-                <div className="rounded-2xl border border-cyan-400/15 bg-slate-900/45 p-4">
-                  <p className="font-semibold text-white">
-                    BSc (Hons) in Information Technology
-                  </p>
-                  <p className="mt-1 text-sm text-slate-300">
-                    Sri Lanka Institute of Information Technology (SLIIT) • Year 4
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-cyan-400/15 bg-slate-900/45 p-4">
-                  <p className="font-semibold text-white">G.C.E. Advanced Level</p>
-                  <p className="mt-1 text-sm text-slate-300">
-                    Royal College, Colombo 07 • Results: 2C, 1S
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-cyan-400/15 bg-slate-900/45 p-4">
-                  <p className="font-semibold text-white">G.C.E. Ordinary Level</p>
-                  <p className="mt-1 text-sm text-slate-300">
-                    St. Benedict's College, Colombo 13 • Results: 9A
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
+        <SkillsShowcase />
 
         <section id="contact" className="py-16">
           <Card className={`overflow-hidden rounded-[2rem] ${glass} ${neonBorder}`}>
@@ -610,17 +668,16 @@ export default function BlueNeonPortfolio() {
                     Contact
                   </p>
                   <h2 className={`text-3xl font-bold text-white md:text-4xl ${neonText}`}>
-                    Let’s build something insightful.
+                    Let’s Connect.
                   </h2>
-                  <p className="mt-4 max-w-xl leading-8 text-slate-300">
-                    This portfolio is ready to be customized with your real links,
-                    project screenshots, resume download, and live dashboard case
-                    studies.
-                  </p>
                 </div>
                 <div className="grid gap-4">
-                  <ContactItem icon={Mail} label="Email" value="yourname@email.com" />
-                  <ContactItem icon={Phone} label="Phone" value="+94 XX XXX XXXX" />
+                  <ContactItem
+                    icon={Mail}
+                    label="Email"
+                    value="devramsaparamadu@gmail.com"
+                  />
+                  <ContactItem icon={Phone} label="Phone" value="+94 71 9244 492" />
                   <ContactItem icon={MapPin} label="Location" value="Sri Lanka" />
                 </div>
               </div>
